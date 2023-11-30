@@ -7,43 +7,39 @@ with open('a.json') as file_a:
 with open('b.json') as file_b:
     data_b = json.load(file_b)
 
-# Lista de claves a buscar en B.json
-claves_a_buscar = ["CC","OO", "OR", "OC","CO", "CR"]  # Agrega las claves que desees
+# Lista de claves a buscar en B.json para invoiceClass
+claves_a_buscar_invoice_class = ["CC", "OO", "OR", "OC", "CO", "CR"]
 
-# Buscar coincidencias en B.json
+# Lista de claves a buscar en B.json para invoiceDocument
+claves_a_buscar_invoice_document = ["AF", "FC", "FA"]
+
+# Buscar coincidencias en B.json para invoiceClass
 for item_b in data_b['invoices']:
     invoice_class = item_b['invoiceHeader']['invoiceClass']
     
-    if invoice_class in claves_a_buscar:
+    if invoice_class in claves_a_buscar_invoice_class:
         # Encontrar el valor correspondiente en A.json
         matching_item = next((item_a for item_a in data_a if item_a['clave'] == invoice_class), None)
         
         if matching_item:
-            # Añadir la línea al mappedData en B.json
-            if 'mappedData' not in item_b:
-                item_b['mappedData'] = {}
-            item_b['mappedData']['invoiceClassDescription'] = matching_item['valor']
+            # Añadir o actualizar la línea en mappedData en B.json
+            mapped_data = item_b.get('mappedData', {})
+            mapped_data['invoiceClassDescription'] = matching_item['valor']
+            item_b['mappedData'] = mapped_data
 
-
-
-
-# Lista de claves a buscar en B.json
-claves_a_buscar = ["AF","FC", "FA"]  # Agrega las claves que desees
-
-# Buscar coincidencias en B.json
+# Buscar coincidencias en B.json para invoiceDocument
 for item_b in data_b['invoices']:
-    invoice_class = item_b['invoiceHeader']['invoiceDocument']
+    invoice_document = item_b['invoiceHeader']['invoiceDocument']
     
-    if invoice_class in claves_a_buscar:
+    if invoice_document in claves_a_buscar_invoice_document:
         # Encontrar el valor correspondiente en A.json
-        matching_item = next((item_a for item_a in data_a if item_a['clave'] == invoice_class), None)
+        matching_item = next((item_a for item_a in data_a if item_a['clave'] == invoice_document), None)
         
         if matching_item:
-            # Añadir la línea al mappedData en B.json
-            if 'mappedData' not in item_b:
-                item_b['mappedData'] = {}
-            item_b['mappedData']['invoiceDocumentDescription'] = matching_item['valor']
-
+            # Añadir o actualizar la línea en mappedData en B.json
+            mapped_data = item_b.get('mappedData', {})
+            mapped_data['invoiceDocumentDescription'] = matching_item['valor']
+            item_b['mappedData'] = mapped_data
 
 # Guardar los cambios en C.json
 with open('c.json', 'w') as file_c:
