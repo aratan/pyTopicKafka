@@ -1,7 +1,5 @@
-from confluent_kafka import Producer, Consumer, KafkaError
-
 # Configura los detalles de tu broker
-brokers = 'b-2.dfghjk.c8.kafka.eu-west-1.amazonaws.com:9092'
+brokers = 'b-2.asdfghjk.c8.kafka.eu-west-1.amazonaws.com:9092'
 group_id = 'tu_group_id'  # Asigna un ID de grupo único para consumidores
 topic = 'invoice.v1.annotated'  # Nombre del tema
 
@@ -38,6 +36,17 @@ def produce_hello_world_message():
 
 # Ejemplo de consumidor
 def consume_messages():
+# Configuración del productor (si necesitas producir mensajes)
+    producer_config = {
+        'bootstrap.servers': 'b-2.devarya.uh9pny.c8.kafka.eu-west-1.amazonaws.com:9092',
+        'client.id': 'your_client_id',
+        'acks': 'all',
+        'retries': 3,
+    'batch.size': 16384,
+    'linger.ms': 1,
+    'compression.type': 'gzip',
+    # Agrega más configuraciones según sea necesario
+    }
     consumer = Consumer(consumer_config)
 
     # Suscríbete al tema de interés
